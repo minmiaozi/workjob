@@ -108,13 +108,23 @@
 - **动画效果** - CSS keyframes + transitions
 
 ### AI集成
-- **OpenAI API** - GPT-3.5-turbo
-- **优化Prompt** - 已内置专业级提示词
-- **错误处理** - 网络异常提示
+- **OpenAI Chat Completions** - 默认模型 `gpt-4o-mini`（可在服务端 `.env` 用 `OPENAI_MODEL` 覆盖）
+- **密钥安全** - 浏览器只请求本机代理 `POST /api/chat/completions`，`OPENAI_API_KEY` 写在 `.env`，勿提交仓库
+- **优化Prompt** - 求职信与简历子弹点已内置专业提示词
+- **错误处理** - 展示 OpenAI 返回的错误信息；静态打开 `index.html` 时会提示需先 `npm start`
+
+### 本地运行（启用 AI）
+```bash
+npm install
+copy .env.example .env   # Windows；macOS/Linux 用 cp
+# 编辑 .env，填入 OPENAI_API_KEY
+npm start
+```
+浏览器访问 **http://localhost:3000**（不要直接用 file:// 打开 `index.html`，否则无法调用 `/api`）。
 
 ### 部署方案
-- **推荐平台:** Vercel / Netlify / GitHub Pages
-- **成本:** $0(免费托管)
+- **静态页:** 仍可托管 HTML/CSS 至 Vercel / Netlify / GitHub Pages
+- **AI 接口:** 需一并部署带密钥的后端代理（或 Serverless Function），勿把 Key 写进前端
 - **域名:** 需单独购买(约$10/年)
 
 ---
@@ -177,9 +187,9 @@ Pro功能页(了解权益)
 ## 🚀 下一步行动
 
 ### 立即可做
-1. **替换API Key** - 在index.html中替换`YOUR_OPENAI_API_KEY_HERE`
-2. **测试功能** - 在浏览器中打开index.html,测试生成功能
-3. **部署上线** - 上传至Vercel/Netlify
+1. **配置 API Key** - 复制 `.env.example` 为 `.env`，设置 `OPENAI_API_KEY`
+2. **本地测试** - `npm install` → `npm start` → 打开 http://localhost:3000 测试求职信与简历子弹点
+3. **部署上线** - 静态资源 + 需配套的 API 代理（密钥仅在服务端）
 
 ### 短期优化
 1. **添加真实博客内容** - 根据SEO文章模板撰写
@@ -198,6 +208,9 @@ Pro功能页(了解权益)
 ```
 ResumeAIPro-Prototype/
 ├── index.html          # 首页(核心工具)
+├── server.js           # 静态托管 + OpenAI 代理
+├── package.json
+├── .env.example        # 环境变量模板（复制为 .env）
 ├── features.html       # Pro功能页
 ├── pricing.html        # 定价页
 ├── blog.html           # 博客页

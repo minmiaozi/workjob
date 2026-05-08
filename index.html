@@ -2,15 +2,33 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-    <!-- 其他meta标签 -->
-    <meta http-equiv="Content-Security-Policy" content="frame-ancestors 'self' https://vercel.app;">
-    <meta http-equiv="X-Frame-Options" content="ALLOW-FROM https://vercel.app;">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ResumeAIPro - Free AI Cover Letter & Resume Bullet Generator</title>
   <meta name="description" content="Generate professional cover letters and powerful resume bullets with AI. Free, instant, no sign-up required.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+  <script>
+    async function generate() {
+      const job = document.getElementById('job').value;
+      const experience = document.getElementById('experience').value;
+      
+      const res = await fetch("https://api.openai.com/v1/chat/completions", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer YOUR_OPENAI_API_KEY"
+        },
+        body: JSON.stringify({
+          model: "gpt-3.5-turbo",
+          messages: [{role: "user", content: `帮我优化这段工作经验：${experience}，岗位是${job}`}]
+        })
+      });
+    
+      const data = await res.json();
+      document.getElementById('result').innerText = data.choices[0].message.content;
+    }
+    </script>
   <style>
     :root {
       --primary-deep: #0a192f;

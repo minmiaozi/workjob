@@ -873,7 +873,7 @@
             <textarea id="workExp" placeholder="Paste your job responsibilities, achievements, or rough notes here..."></textarea>
           </div>
 
-          <button type="button" class="generate-btn" onclick="generateBullets(this)">
+          <button class="generate-btn" onclick="generateBullets()">
             Generate Professional Bullets ✨
           </button>
 
@@ -916,7 +916,7 @@
             <textarea id="userSkills" placeholder="Describe your relevant experience, key achievements, and why you're a great fit..."></textarea>
           </div>
 
-          <button type="button" class="generate-btn" onclick="generateCoverLetter(this)">
+          <button class="generate-btn" onclick="generateCoverLetter()">
             Generate Cover Letter ✨
           </button>
 
@@ -927,7 +927,7 @@
               <button class="result-action-btn primary" onclick="copyToClipboard('coverContent')">
                 📋 Copy All
               </button>
-              <button type="button" class="result-action-btn" onclick="generateCoverLetter(this)">
+              <button class="result-action-btn" onclick="generateCoverLetter()">
                 🔄 Regenerate
               </button>
             </div>
@@ -1070,49 +1070,8 @@
       });
     });
 
-    // Calls local proxy (server.js) — API key stays on the server in .env
-    async function callAIGenerate(promptContent, options = {}) {
-      const max_tokens = options.max_tokens ?? 1200;
-      try {
-        const response = await fetch("/api/chat/completions", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            model: options.model || "gpt-4o-mini",
-            messages: [
-              {
-                role: "system",
-                content:
-                  "You are a professional, concise career coach. Only output the finished content, no extra explanations, no greetings, no extra notes.",
-              },
-              { role: "user", content: promptContent },
-            ],
-            temperature: 0.7,
-            max_tokens,
-          }),
-        });
-        const data = await response.json();
-        if (!response.ok) {
-          const msg =
-            data?.error?.message ||
-            (typeof data?.error === "string" ? data.error : null) ||
-            response.statusText ||
-            "Request failed";
-          return "API error: " + msg;
-        }
-        const text = data.choices?.[0]?.message?.content?.trim();
-        return text || "Generation failed, please try again later.";
-      } catch (err) {
-        console.error(err);
-        return (
-          "Network error. Run `npm install` and `npm start`, then open http://localhost:3000 " +
-          "(do not open index.html as a file)."
-        );
-      }
-    }
-
     // Generate Resume Bullets
-    async function generateBullets(btn) {
+    async function generateBullets() {
       const jobTitle = document.getElementById("jobTitle").value.trim();
       const workExp = document.getElementById("workExp").value.trim();
       
@@ -1123,38 +1082,52 @@
 
       const resultBox = document.getElementById("bulletResult");
       const resultContent = document.getElementById("bulletContent");
+      const btn = event.target;
       
       btn.classList.add('loading');
       btn.disabled = true;
       resultBox.classList.add('visible');
       resultContent.innerText = "Generating optimized bullets...";
-      
-      const prompt = `You are a top 1% career coach with 10+ years of resume writing experience.
-Generate 5 recruiter-approved resume bullet points based on the user's job title and experience.
 
-Rules:
-- Start with strong, industry-standard action verbs
-- Focus on achievements, not daily duties
-- Add quantifiable results where possible
-- Keep each line short, scannable, under 20 words
-- No generic phrases, no fluff
-- Output ONLY the bullet points, no extra content
-
-Job Title: ${jobTitle}
-User Experience: ${workExp}`;
-      
-      const result = await callAIGenerate(prompt, { max_tokens: 800 });
-      resultContent.innerText = result;
-      btn.classList.remove('loading');
-      btn.disabled = false;
+      try {
+        const response = await fetch('/api/generate', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            task: 'bullets',
+            jobTitle,
+            experience: workExp
+          })
+        });
+        let data;
+        try {
+          data = await response.json();
+        } catch {
+          resultContent.innerText =
+            'API调用失败：服务器返回异常（HTTP ' + response.status + '）。请查看终端日志或稍后重试。';
+          return;
+        }
+        if (!response.ok) {
+          resultContent.innerText = data.error || 'API调用失败，请稍后重试。';
+        } else {
+          resultContent.innerText = data.result || '';
+        }
+      } catch (err) {
+        console.error(err);
+        resultContent.innerText =
+          'Network error. Run the local server (e.g. node server.js) and open http://localhost:3000';
+      } finally {
+        btn.classList.remove('loading');
+        btn.disabled = false;
+      }
     }
 
     // Generate Cover Letter
-    async function generateCoverLetter(btn) {
+    async function generateCoverLetter() {
       const company = document.getElementById("companyName").value.trim();
       const position = document.getElementById("targetPosition").value.trim();
       const skills = document.getElementById("userSkills").value.trim();
-      
+
       if (!company || !position || !skills) {
         alert("Please fill in all required fields");
         return;
@@ -1162,31 +1135,45 @@ User Experience: ${workExp}`;
 
       const resultBox = document.getElementById("coverResult");
       const resultContent = document.getElementById("coverContent");
-      
+      const btn = event.target;
+
       btn.classList.add('loading');
       btn.disabled = true;
       resultBox.classList.add('visible');
-      resultContent.innerText = "Generating professional cover letter...";
-      
-      const prompt = `Write a professional, genuine, concise cover letter for a job application.
+      resultContent.innerText = "Generating your cover letter...";
 
-Tone: confident, polite, not overly generic, under 350 words.
-
-Include 3 core parts:
-1. Clear statement of interest in the position
-2. 2-3 relevant skills/experience that match the role
-3. Professional closing with a request for an interview
-
-DO NOT use overused template phrases. Output only the letter content, no extra notes.
-
-Company: ${company}
-Position: ${position}
-Candidate Profile: ${skills}`;
-      
-      const result = await callAIGenerate(prompt, { max_tokens: 1200 });
-      resultContent.innerText = result;
-      btn.classList.remove('loading');
-      btn.disabled = false;
+      try {
+        const response = await fetch('/api/generate', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            task: 'coverLetter',
+            company,
+            position,
+            skills
+          })
+        });
+        let data;
+        try {
+          data = await response.json();
+        } catch {
+          resultContent.innerText =
+            'API调用失败：服务器返回异常（HTTP ' + response.status + '）。请查看终端日志或稍后重试。';
+          return;
+        }
+        if (!response.ok) {
+          resultContent.innerText = data.error || 'API调用失败，请稍后重试。';
+        } else {
+          resultContent.innerText = data.result || '';
+        }
+      } catch (err) {
+        console.error(err);
+        resultContent.innerText =
+          'Network error. If you opened this page as a file, run the local server (e.g. node server.js) and open http://localhost:3000';
+      } finally {
+        btn.classList.remove('loading');
+        btn.disabled = false;
+      }
     }
 
     // Copy to Clipboard

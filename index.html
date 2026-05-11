@@ -1,0 +1,1077 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ResumeAIPro — AI Resume & Cover Letter Generator</title>
+  <meta name="description" content="Generate professional resume bullets and cover letters with AI. Free to start, no sign-up required.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary-deep: #0a192f;
+      --primary-blue: #1e3a8a;
+      --accent-amber: #f59e0b;
+      --accent-amber-light: #fbbf24;
+      --text-dark: #0f172a;
+      --text-gray: #475569;
+      --text-light: #94a3b8;
+      --bg-cream: #fefce8;
+      --bg-light: #f8fafc;
+      --white: #ffffff;
+      --gradient-hero: linear-gradient(135deg, #0a192f 0%, #1e3a8a 50%, #1e40af 100%);
+      --gradient-accent: linear-gradient(135deg, #f59e0b 0%, #fbbf24 100%);
+      --shadow-sm: 0 1px 3px rgba(0,0,0,0.05);
+      --shadow-md: 0 4px 12px rgba(0,0,0,0.08);
+      --shadow-lg: 0 12px 32px rgba(0,0,0,0.12);
+      --radius-sm: 8px;
+      --radius-md: 12px;
+      --radius-lg: 20px;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg-light);
+      color: var(--text-dark);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* ===== NAVIGATION ===== */
+    .navbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+      transition: box-shadow 0.3s ease;
+    }
+
+    .navbar.scrolled {
+      box-shadow: var(--shadow-md);
+    }
+
+    .nav-container {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 16px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--text-dark);
+    }
+
+    .nav-logo-icon {
+      width: 36px;
+      height: 36px;
+      background: var(--gradient-hero);
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 32px;
+    }
+
+    .nav-link {
+      text-decoration: none;
+      color: var(--text-gray);
+      font-size: 15px;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+
+    .nav-link:hover {
+      color: var(--text-dark);
+    }
+
+    .nav-cta {
+      padding: 10px 24px;
+      background: var(--gradient-accent);
+      color: var(--text-dark);
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 15px;
+      border-radius: var(--radius-sm);
+      transition: all 0.3s ease;
+      box-shadow: 0 2px 8px rgba(245, 158, 11, 0.3);
+    }
+
+    .nav-cta:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 16px rgba(245, 158, 11, 0.4);
+    }
+
+    /* ===== HERO ===== */
+    .hero {
+      padding: 160px 24px 100px;
+      background: var(--gradient-hero);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: radial-gradient(circle at 30% 70%, rgba(245, 158, 11, 0.2) 0%, transparent 50%);
+    }
+
+    .hero-container {
+      max-width: 1000px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 1;
+      text-align: center;
+    }
+
+    .hero h1 {
+      font-family: 'Instrument Serif', Georgia, serif;
+      font-size: clamp(40px, 5vw, 64px);
+      font-weight: 400;
+      line-height: 1.2;
+      color: var(--white);
+      margin-bottom: 24px;
+    }
+
+    .hero h1 .highlight {
+      background: var(--gradient-accent);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero-subtitle {
+      font-size: clamp(18px, 2.5vw, 22px);
+      color: rgba(255, 255, 255, 0.85);
+      max-width: 700px;
+      margin: 0 auto 40px;
+    }
+
+    .hero-stats {
+      display: flex;
+      justify-content: center;
+      gap: clamp(24px, 6vw, 56px);
+      flex-wrap: wrap;
+      margin-top: 8px;
+    }
+
+    .hero-stat {
+      text-align: center;
+    }
+
+    .hero-stat-number {
+      font-size: clamp(28px, 4vw, 40px);
+      font-weight: 700;
+      color: var(--accent-amber-light);
+      line-height: 1.2;
+    }
+
+    .hero-stat-label {
+      font-size: 14px;
+      color: rgba(255, 255, 255, 0.75);
+      margin-top: 4px;
+    }
+
+    /* ===== TOOLS ===== */
+    .tools-section {
+      padding: 100px 24px;
+      background: var(--bg-light);
+      margin-top: -60px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .tools-container {
+      max-width: 1280px;
+      margin: 0 auto;
+    }
+
+    .tools-header {
+      text-align: center;
+      margin-bottom: 48px;
+    }
+
+    .tools-header h2 {
+      font-family: 'Instrument Serif', Georgia, serif;
+      font-size: clamp(32px, 4vw, 44px);
+      font-weight: 400;
+      color: var(--text-dark);
+      margin-bottom: 16px;
+    }
+
+    .tools-header p {
+      font-size: 18px;
+      color: var(--text-gray);
+      max-width: 560px;
+      margin: 0 auto;
+    }
+
+    .tools-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+      gap: 32px;
+      align-items: start;
+    }
+
+    .tool-card {
+      background: var(--white);
+      border-radius: var(--radius-lg);
+      padding: 36px;
+      box-shadow: var(--shadow-md);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .tool-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .tool-card-header {
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+      margin-bottom: 28px;
+    }
+
+    .tool-icon {
+      width: 48px;
+      height: 48px;
+      background: var(--bg-cream);
+      border-radius: var(--radius-md);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      flex-shrink: 0;
+    }
+
+    .tool-card-header h3 {
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--text-dark);
+      margin-bottom: 4px;
+    }
+
+    .tool-card-subtitle {
+      font-size: 14px;
+      color: var(--text-gray);
+    }
+
+    .input-group {
+      margin-bottom: 18px;
+    }
+
+    .input-group label {
+      display: block;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-dark);
+      margin-bottom: 8px;
+    }
+
+    .input-group input,
+    .input-group textarea {
+      width: 100%;
+      padding: 14px 16px;
+      border: 1px solid #e2e8f0;
+      border-radius: var(--radius-sm);
+      font-size: 15px;
+      font-family: inherit;
+      transition: border-color 0.2s;
+    }
+
+    .input-group input:focus,
+    .input-group textarea:focus {
+      outline: none;
+      border-color: var(--primary-blue);
+    }
+
+    .input-group textarea {
+      min-height: 140px;
+      resize: vertical;
+    }
+
+    .generate-btn {
+      width: 100%;
+      padding: 16px 24px;
+      margin-top: 8px;
+      background: var(--gradient-hero);
+      color: var(--white);
+      border: none;
+      border-radius: var(--radius-md);
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .generate-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(30, 58, 138, 0.35);
+    }
+
+    .generate-btn:active {
+      transform: translateY(0);
+    }
+
+    .generate-btn.loading {
+      opacity: 0.85;
+      pointer-events: none;
+    }
+
+    .result-box {
+      margin-top: 24px;
+      padding: 24px;
+      background: var(--bg-light);
+      border-radius: var(--radius-md);
+      border: 1px solid #e2e8f0;
+      display: none;
+    }
+
+    .result-box.visible {
+      display: block;
+    }
+
+    .result-label {
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--text-light);
+      margin-bottom: 12px;
+    }
+
+    .result-content {
+      font-size: 15px;
+      line-height: 1.75;
+      color: var(--text-dark);
+      white-space: pre-wrap;
+      min-height: 60px;
+    }
+
+    .result-actions {
+      display: flex;
+      gap: 12px;
+      margin-top: 20px;
+      flex-wrap: wrap;
+    }
+
+    .result-action-btn {
+      padding: 10px 18px;
+      border-radius: var(--radius-sm);
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      border: 1px solid #e2e8f0;
+      background: var(--white);
+      color: var(--text-dark);
+      transition: all 0.2s;
+    }
+
+    .result-action-btn:hover {
+      border-color: var(--primary-blue);
+      color: var(--primary-blue);
+    }
+
+    .result-action-btn.primary {
+      background: var(--gradient-accent);
+      border: none;
+      color: var(--text-dark);
+    }
+
+    .result-action-btn.primary:hover {
+      box-shadow: 0 4px 12px rgba(245, 158, 11, 0.35);
+    }
+
+    /* ===== FEATURES ===== */
+    .features-section {
+      padding: 100px 24px;
+      background: var(--white);
+    }
+
+    .features-container {
+      max-width: 1280px;
+      margin: 0 auto;
+    }
+
+    .features-header {
+      text-align: center;
+      margin-bottom: 56px;
+    }
+
+    .features-header h2 {
+      font-family: 'Instrument Serif', Georgia, serif;
+      font-size: clamp(32px, 4vw, 44px);
+      font-weight: 400;
+      color: var(--text-dark);
+      margin-bottom: 16px;
+    }
+
+    .features-header p {
+      font-size: 18px;
+      color: var(--text-gray);
+      max-width: 560px;
+      margin: 0 auto;
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 28px;
+    }
+
+    .feature-card {
+      padding: 28px;
+      background: var(--bg-light);
+      border-radius: var(--radius-md);
+      transition: transform 0.2s ease;
+    }
+
+    .feature-card:hover {
+      transform: translateY(-4px);
+    }
+
+    .feature-icon {
+      font-size: 32px;
+      margin-bottom: 16px;
+    }
+
+    .feature-card h3 {
+      font-size: 18px;
+      font-weight: 700;
+      margin-bottom: 10px;
+      color: var(--text-dark);
+    }
+
+    .feature-card p {
+      font-size: 15px;
+      color: var(--text-gray);
+      line-height: 1.7;
+    }
+
+    /* ===== CTA ===== */
+    .cta-section {
+      padding: 100px 24px;
+      background: var(--gradient-hero);
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .cta-section::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 70% 30%, rgba(245, 158, 11, 0.15) 0%, transparent 50%);
+    }
+
+    .cta-container {
+      max-width: 720px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 1;
+    }
+
+    .cta-section h2 {
+      font-family: 'Instrument Serif', Georgia, serif;
+      font-size: clamp(28px, 4vw, 40px);
+      font-weight: 400;
+      color: var(--white);
+      margin-bottom: 16px;
+    }
+
+    .cta-section > .cta-container > p {
+      font-size: 18px;
+      color: rgba(255, 255, 255, 0.85);
+      margin-bottom: 32px;
+    }
+
+    .cta-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .cta-btn-primary {
+      padding: 14px 32px;
+      background: var(--gradient-accent);
+      color: var(--text-dark);
+      text-decoration: none;
+      font-weight: 600;
+      border-radius: var(--radius-sm);
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 16px rgba(245, 158, 11, 0.35);
+    }
+
+    .cta-btn-primary:hover {
+      transform: translateY(-2px);
+    }
+
+    .cta-btn-secondary {
+      padding: 14px 32px;
+      background: transparent;
+      color: var(--white);
+      text-decoration: none;
+      font-weight: 600;
+      border-radius: var(--radius-sm);
+      border: 2px solid rgba(255, 255, 255, 0.4);
+      transition: all 0.3s ease;
+    }
+
+    .cta-btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    /* ===== FOOTER ===== */
+    .footer {
+      background: var(--primary-deep);
+      color: var(--white);
+      padding: 80px 24px 40px;
+    }
+
+    .footer-container {
+      max-width: 1280px;
+      margin: 0 auto;
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 48px;
+      margin-bottom: 60px;
+    }
+
+    .footer-section h4 {
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 20px;
+      color: var(--accent-amber-light);
+    }
+
+    .footer-section ul {
+      list-style: none;
+    }
+
+    .footer-section li {
+      margin-bottom: 12px;
+    }
+
+    .footer-section a {
+      color: rgba(255, 255, 255, 0.7);
+      text-decoration: none;
+      font-size: 15px;
+      transition: color 0.2s;
+    }
+
+    .footer-section a:hover {
+      color: var(--white);
+    }
+
+    .footer-bottom {
+      padding-top: 40px;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .footer-bottom p {
+      color: rgba(255, 255, 255, 0.5);
+      font-size: 14px;
+    }
+
+    .footer-social {
+      display: flex;
+      gap: 20px;
+    }
+
+    .footer-social a {
+      color: rgba(255, 255, 255, 0.6);
+      text-decoration: none;
+      font-size: 15px;
+    }
+
+    .footer-social a:hover {
+      color: var(--white);
+    }
+
+    @media (max-width: 768px) {
+      .nav-links {
+        display: none;
+      }
+
+      .tools-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .footer-bottom {
+        flex-direction: column;
+        text-align: center;
+      }
+    }
+  </style>
+</head>
+<body>
+  <nav class="navbar" id="navbar">
+    <div class="nav-container">
+      <a href="index.html" class="nav-logo">
+        <div class="nav-logo-icon">⚡</div>
+        ResumeAIPro
+      </a>
+      <div class="nav-links">
+        <a href="#tools" class="nav-link">Tools</a>
+        <a href="features.html" class="nav-link">Features</a>
+        <a href="pricing.html" class="nav-link">Pricing</a>
+        <a href="blog.html" class="nav-link">Blog</a>
+        <a href="pricing.html" class="nav-cta">Get Pro →</a>
+      </div>
+    </div>
+  </nav>
+
+  <section class="hero">
+    <div class="hero-container">
+      <h1>
+        Land Your Dream Job with<br>
+        <span class="highlight">AI-Powered</span> Documents
+      </h1>
+      <p class="hero-subtitle">
+        Generate professional cover letters and recruiter-approved resume bullets in seconds.
+        No templates, no hassle—just instant results tailored to your experience.
+      </p>
+      <div class="hero-stats">
+        <div class="hero-stat">
+          <div class="hero-stat-number">50K+</div>
+          <div class="hero-stat-label">Job seekers helped</div>
+        </div>
+        <div class="hero-stat">
+          <div class="hero-stat-number">4.9/5</div>
+          <div class="hero-stat-label">User satisfaction</div>
+        </div>
+        <div class="hero-stat">
+          <div class="hero-stat-number">&lt;10s</div>
+          <div class="hero-stat-label">Average generation time</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="tools-section" id="tools">
+    <div class="tools-container">
+      <div class="tools-header">
+        <h2>Start Creating in Seconds</h2>
+        <p>Two powerful tools, zero learning curve. Just paste your details and let AI do the heavy lifting.</p>
+      </div>
+
+      <div class="tools-grid">
+        <div class="tool-card">
+          <div class="tool-card-header">
+            <div class="tool-icon">📝</div>
+            <div>
+              <h3>Resume Bullet Points</h3>
+              <div class="tool-card-subtitle">Transform experience into impact</div>
+            </div>
+          </div>
+
+          <div class="input-group">
+            <label>Target Job Title</label>
+            <input type="text" id="jobTitle" placeholder="e.g. Software Engineer, Sales Manager">
+          </div>
+
+          <div class="input-group">
+            <label>Your Work Experience</label>
+            <textarea id="workExperience" placeholder="Paste your job responsibilities, achievements, or rough notes here..."></textarea>
+          </div>
+
+          <button type="button" class="generate-btn" onclick="generateBullets()">
+            Generate Professional Bullets ✨
+          </button>
+
+          <div id="bulletResult" class="result-box">
+            <div class="result-label">AI-Generated Bullet Points</div>
+            <div class="result-content" id="bulletContent"></div>
+            <div class="result-actions">
+              <button type="button" class="result-action-btn primary" onclick="copyToClipboard('bulletContent')">
+                📋 Copy All
+              </button>
+              <button type="button" class="result-action-btn" onclick="generateBullets()">
+                🔄 Regenerate
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="tool-card">
+          <div class="tool-card-header">
+            <div class="tool-icon">✉️</div>
+            <div>
+              <h3>Cover Letter</h3>
+              <div class="tool-card-subtitle">Stand out from the stack</div>
+            </div>
+          </div>
+
+          <div class="input-group">
+            <label>Company Name</label>
+            <input type="text" id="companyName" placeholder="e.g. Google, Amazon">
+          </div>
+
+          <div class="input-group">
+            <label>Position</label>
+            <input type="text" id="targetPosition" placeholder="e.g. Product Manager">
+          </div>
+
+          <div class="input-group">
+            <label>Your Skills &amp; Experience</label>
+            <textarea id="userSkills" placeholder="Describe your relevant experience, key achievements, and why you're a great fit..."></textarea>
+          </div>
+
+          <button type="button" class="generate-btn" onclick="generateCoverLetter()">
+            Generate Cover Letter ✨
+          </button>
+
+          <div id="coverResult" class="result-box">
+            <div class="result-label">AI-Generated Cover Letter</div>
+            <div class="result-content" id="coverContent"></div>
+            <div class="result-actions">
+              <button type="button" class="result-action-btn primary" onclick="copyToClipboard('coverContent')">
+                📋 Copy All
+              </button>
+              <button type="button" class="result-action-btn" onclick="generateCoverLetter()">
+                🔄 Regenerate
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="features-section">
+    <div class="features-container">
+      <div class="features-header">
+        <h2>Why Job Seekers Love Us</h2>
+        <p>Built by hiring experts, powered by advanced AI. Here's what makes us different.</p>
+      </div>
+
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon">⚡</div>
+          <h3>Instant Results</h3>
+          <p>No waiting, no templates to fill. Just paste your details and get professional content in under 10 seconds.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🎯</div>
+          <h3>ATS-Optimized</h3>
+          <p>Our bullets are crafted to pass Applicant Tracking Systems and catch recruiters' attention in seconds.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🔒</div>
+          <h3>No Sign-Up Required</h3>
+          <p>Start using immediately. No email, no password, no credit card. Just pure value, zero friction.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">💎</div>
+          <h3>Recruiter-Approved</h3>
+          <p>Our prompts are designed by hiring managers who've reviewed 10,000+ resumes. We know what works.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🌍</div>
+          <h3>Global Reach</h3>
+          <p>Optimized for US, UK, EU, and international job markets. Tailored for different industries and experience levels.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">✨</div>
+          <h3>Always Improving</h3>
+          <p>Our AI models are continuously updated based on the latest hiring trends and recruiter feedback.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="cta-section">
+    <div class="cta-container">
+      <h2>Ready to Land More Interviews?</h2>
+      <p>Join 50,000+ job seekers who've transformed their applications with AI-powered documents.</p>
+      <div class="cta-buttons">
+        <a href="#tools" class="cta-btn-primary">Start Free →</a>
+        <a href="pricing.html" class="cta-btn-secondary">View Pro Plans</a>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="footer-container">
+      <div class="footer-grid">
+        <div class="footer-section">
+          <h4>Product</h4>
+          <ul>
+            <li><a href="index.html">Resume Bullets</a></li>
+            <li><a href="index.html">Cover Letter</a></li>
+            <li><a href="features.html">Pro Features</a></li>
+            <li><a href="pricing.html">Pricing</a></li>
+          </ul>
+        </div>
+        <div class="footer-section">
+          <h4>Resources</h4>
+          <ul>
+            <li><a href="blog.html">Blog</a></li>
+            <li><a href="blog.html">Career Tips</a></li>
+            <li><a href="blog.html">Resume Guide</a></li>
+            <li><a href="blog.html">Interview Prep</a></li>
+          </ul>
+        </div>
+        <div class="footer-section">
+          <h4>Company</h4>
+          <ul>
+            <li><a href="privacy.html">Privacy Policy</a></li>
+            <li><a href="terms.html">Terms of Service</a></li>
+            <li><a href="disclaimer.html">Disclaimer</a></li>
+            <li><a href="mailto:hello@resumeaipro.pro">Contact</a></li>
+          </ul>
+        </div>
+        <div class="footer-section">
+          <h4>Connect</h4>
+          <ul>
+            <li><a href="#">Twitter</a></li>
+            <li><a href="#">LinkedIn</a></li>
+            <li><a href="#">Reddit</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>© 2026 ResumeAIPro. All rights reserved.</p>
+        <div class="footer-social">
+          <a href="#" title="Twitter">𝕏</a>
+          <a href="#" title="LinkedIn">in</a>
+          <a href="#" title="Reddit">⟪</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    window.addEventListener('scroll', () => {
+      const navbar = document.getElementById('navbar');
+      if (window.scrollY > 50) navbar.classList.add('scrolled');
+      else navbar.classList.remove('scrolled');
+    });
+
+    document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+      anchor.addEventListener('click', function (e) {
+        const href = this.getAttribute('href');
+        if (href === '#') return;
+        e.preventDefault();
+        const target = document.querySelector(href);
+        if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+    });
+
+    /** 兼容方舟/OpenAI：choices 可能在顶层或嵌套；content 可能为 string 或分段数组 */
+    function unwrapCompletionPayload(data) {
+      if (!data || typeof data !== 'object') return data;
+      if (Array.isArray(data.choices) && data.choices.length > 0) return data;
+      const inner = data.data ?? data.result ?? data.output ?? data.response;
+      if (
+        inner &&
+        typeof inner === 'object' &&
+        Array.isArray(inner.choices) &&
+        inner.choices.length > 0
+      ) {
+        return { ...data, choices: inner.choices };
+      }
+      return data;
+    }
+
+    function assistantTextFromPayload(data) {
+      const d = unwrapCompletionPayload(data);
+      const choice = d?.choices?.[0];
+      const msg = choice?.message ?? choice?.delta;
+      let raw = msg?.content;
+      if (raw == null && msg?.reasoning_content != null) raw = msg.reasoning_content;
+      if (typeof raw === 'string') return raw;
+      if (Array.isArray(raw)) {
+        return raw
+          .map((p) =>
+            typeof p === 'string' ? p : p?.text ?? p?.content ?? ''
+          )
+          .join('');
+      }
+      if (typeof d?.result === 'string') return d.result;
+      return '';
+    }
+
+    async function generateBullets() {
+      const job = document.getElementById('jobTitle').value.trim();
+      const content = document.getElementById('workExperience').value.trim();
+      const resultBox = document.getElementById('bulletResult');
+      const resultContent = document.getElementById('bulletContent');
+      const btn = event.target.closest('.generate-btn');
+
+      if (!job || !content) {
+        alert('Please fill in job title and your work experience');
+        return;
+      }
+
+      resultBox.classList.add('visible');
+      resultContent.innerText = 'Generating optimized bullets...';
+      if (btn) {
+        btn.classList.add('loading');
+        btn.disabled = true;
+      }
+
+      try {
+        const res = await fetch('/api/generate', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            messages: [
+              {
+                role: 'system',
+                content:
+                  '你是专业的简历优化师，把用户的经历改成专业、简洁、适合投递的简历要点。'
+              },
+              {
+                role: 'user',
+                content: `求职岗位：${job}，经历：${content}`
+              }
+            ]
+          })
+        });
+
+        const data = await res.json();
+        if (data.code != null && data.code !== 0 && data.message) {
+          throw new Error(data.message);
+        }
+        if (data.error) throw new Error(data.error);
+        if (!res.ok) throw new Error(data.error || '请求失败 (' + res.status + ')');
+
+        const text = assistantTextFromPayload(data);
+        if (!text) {
+          console.error('Unexpected API payload:', data);
+          throw new Error('模型未返回正文（响应格式异常），请查看服务端日志');
+        }
+        resultContent.innerText = text;
+      } catch (err) {
+        console.error(err);
+        resultContent.innerText = '错误：' + err.message;
+      } finally {
+        if (btn) {
+          btn.classList.remove('loading');
+          btn.disabled = false;
+        }
+      }
+    }
+
+    async function generateCoverLetter() {
+      const company = document.getElementById('companyName').value.trim();
+      const position = document.getElementById('targetPosition').value.trim();
+      const skills = document.getElementById('userSkills').value.trim();
+      const resultBox = document.getElementById('coverResult');
+      const resultContent = document.getElementById('coverContent');
+      const btn = event.target.closest('.generate-btn');
+
+      if (!company || !position || !skills) {
+        alert('Please fill in all required fields');
+        return;
+      }
+
+      resultBox.classList.add('visible');
+      resultContent.innerText = 'Generating your cover letter...';
+      if (btn) {
+        btn.classList.add('loading');
+        btn.disabled = true;
+      }
+
+      try {
+        const res = await fetch('/api/generate', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            messages: [
+              {
+                role: 'system',
+                content:
+                  'You are a professional career writer who writes clear, compelling cover letters for international job applications.'
+              },
+              {
+                role: 'user',
+                content: `Write a professional cover letter in English for the following:
+Company: ${company}
+Position: ${position}
+Candidate background and fit: ${skills}`
+              }
+            ]
+          })
+        });
+
+        const data = await res.json();
+        if (data.code != null && data.code !== 0 && data.message) {
+          throw new Error(data.message);
+        }
+        if (data.error) throw new Error(data.error);
+        if (!res.ok) throw new Error(data.error || '请求失败 (' + res.status + ')');
+
+        const text = assistantTextFromPayload(data);
+        if (!text) {
+          console.error('Unexpected API payload:', data);
+          throw new Error('模型未返回正文（响应格式异常），请查看服务端日志');
+        }
+        resultContent.innerText = text;
+      } catch (err) {
+        console.error(err);
+        resultContent.innerText = '错误：' + err.message;
+      } finally {
+        if (btn) {
+          btn.classList.remove('loading');
+          btn.disabled = false;
+        }
+      }
+    }
+
+    function copyToClipboard(elementId) {
+      const text = document.getElementById(elementId).innerText;
+      const trigger = event.target.closest('.result-action-btn');
+      navigator.clipboard.writeText(text).then(() => {
+        if (!trigger) return;
+        const original = trigger.innerText;
+        trigger.innerText = '✓ Copied!';
+        setTimeout(() => {
+          trigger.innerText = original;
+        }, 2000);
+      });
+    }
+  </script>
+</body>
+</html>

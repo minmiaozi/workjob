@@ -1,0 +1,1193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ResumeAIPro - Free AI Cover Letter & Resume Bullet Generator</title>
+  <meta name="description" content="Generate professional cover letters and powerful resume bullets with AI. Free, instant, no sign-up required.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+  <script>
+    async function generate() {
+      const job = document.getElementById('job').value;
+      const experience = document.getElementById('experience').value;
+      
+      const res = await fetch("https://api.openai.com/v1/chat/completions", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer YOUR_OPENAI_API_KEY"
+        },
+        body: JSON.stringify({
+          model: "gpt-3.5-turbo",
+          messages: [{role: "user", content: `帮我优化这段工作经验：${experience}，岗位是${job}`}]
+        })
+      });
+    
+      const data = await res.json();
+      document.getElementById('result').innerText = data.choices[0].message.content;
+    }
+    </script>
+  <style>
+    :root {
+      --primary-deep: #0a192f;
+      --primary-blue: #1e3a8a;
+      --accent-amber: #f59e0b;
+      --accent-amber-light: #fbbf24;
+      --text-dark: #0f172a;
+      --text-gray: #475569;
+      --text-light: #94a3b8;
+      --bg-cream: #fefce8;
+      --bg-light: #f8fafc;
+      --white: #ffffff;
+      --gradient-hero: linear-gradient(135deg, #0a192f 0%, #1e3a8a 50%, #1e40af 100%);
+      --gradient-accent: linear-gradient(135deg, #f59e0b 0%, #fbbf24 100%);
+      --shadow-sm: 0 1px 3px rgba(0,0,0,0.05);
+      --shadow-md: 0 4px 12px rgba(0,0,0,0.08);
+      --shadow-lg: 0 12px 32px rgba(0,0,0,0.12);
+      --radius-sm: 8px;
+      --radius-md: 12px;
+      --radius-lg: 20px;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg-light);
+      color: var(--text-dark);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* ===== NAVIGATION ===== */
+    .navbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+      transition: all 0.3s ease;
+    }
+
+    .navbar.scrolled {
+      box-shadow: var(--shadow-md);
+    }
+
+    .nav-container {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 16px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--text-dark);
+    }
+
+    .nav-logo-icon {
+      width: 36px;
+      height: 36px;
+      background: var(--gradient-hero);
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 32px;
+    }
+
+    .nav-link {
+      text-decoration: none;
+      color: var(--text-gray);
+      font-size: 15px;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+
+    .nav-link:hover {
+      color: var(--text-dark);
+    }
+
+    .nav-cta {
+      padding: 10px 24px;
+      background: var(--gradient-accent);
+      color: var(--text-dark);
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 15px;
+      border-radius: var(--radius-sm);
+      transition: all 0.3s ease;
+      box-shadow: 0 2px 8px rgba(245, 158, 11, 0.3);
+    }
+
+    .nav-cta:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 16px rgba(245, 158, 11, 0.4);
+    }
+
+    /* ===== HERO SECTION ===== */
+    .hero {
+      padding: 140px 24px 80px;
+      background: var(--gradient-hero);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: 
+        radial-gradient(circle at 20% 50%, rgba(245, 158, 11, 0.15) 0%, transparent 50%),
+        radial-gradient(circle at 80% 50%, rgba(251, 191, 36, 0.1) 0%, transparent 50%);
+      animation: float 20s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translate(0, 0); }
+      33% { transform: translate(-30px, 30px); }
+      66% { transform: translate(30px, -30px); }
+    }
+
+    .hero-container {
+      max-width: 1280px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 16px;
+      background: rgba(245, 158, 11, 0.2);
+      border: 1px solid rgba(245, 158, 11, 0.3);
+      border-radius: 50px;
+      color: var(--accent-amber-light);
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 24px;
+      animation: fadeInUp 0.6s ease;
+    }
+
+    .hero-badge::before {
+      content: '✨';
+      font-size: 16px;
+    }
+
+    .hero h1 {
+      font-family: 'Instrument Serif', Georgia, serif;
+      font-size: clamp(40px, 6vw, 68px);
+      font-weight: 400;
+      line-height: 1.1;
+      color: var(--white);
+      margin-bottom: 24px;
+      animation: fadeInUp 0.6s ease 0.1s backwards;
+    }
+
+    .hero h1 .highlight {
+      background: var(--gradient-accent);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero-subtitle {
+      font-size: clamp(18px, 2.5vw, 22px);
+      color: rgba(255, 255, 255, 0.85);
+      max-width: 600px;
+      margin-bottom: 40px;
+      animation: fadeInUp 0.6s ease 0.2s backwards;
+    }
+
+    .hero-stats {
+      display: flex;
+      gap: 48px;
+      margin-top: 48px;
+      padding-top: 48px;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      animation: fadeInUp 0.6s ease 0.4s backwards;
+    }
+
+    .hero-stat {
+      text-align: left;
+    }
+
+    .hero-stat-number {
+      font-size: 32px;
+      font-weight: 700;
+      color: var(--accent-amber-light);
+      margin-bottom: 4px;
+    }
+
+    .hero-stat-label {
+      font-size: 14px;
+      color: rgba(255, 255, 255, 0.7);
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* ===== MAIN TOOLS SECTION ===== */
+    .tools-section {
+      padding: 80px 24px;
+      background: var(--bg-light);
+    }
+
+    .tools-container {
+      max-width: 1280px;
+      margin: 0 auto;
+    }
+
+    .tools-header {
+      text-align: center;
+      margin-bottom: 60px;
+    }
+
+    .tools-header h2 {
+      font-family: 'Instrument Serif', Georgia, serif;
+      font-size: clamp(32px, 4vw, 48px);
+      font-weight: 400;
+      color: var(--text-dark);
+      margin-bottom: 16px;
+    }
+
+    .tools-header p {
+      font-size: 18px;
+      color: var(--text-gray);
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .tools-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+      gap: 32px;
+    }
+
+    .tool-card {
+      background: var(--white);
+      border-radius: var(--radius-lg);
+      padding: 36px;
+      box-shadow: var(--shadow-md);
+      border: 1px solid rgba(0, 0, 0, 0.05);
+      transition: all 0.3s ease;
+    }
+
+    .tool-card:hover {
+      box-shadow: var(--shadow-lg);
+      transform: translateY(-4px);
+    }
+
+    .tool-card-header {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 28px;
+    }
+
+    .tool-icon {
+      width: 56px;
+      height: 56px;
+      background: var(--gradient-hero);
+      border-radius: var(--radius-md);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 28px;
+    }
+
+    .tool-card h3 {
+      font-family: 'Instrument Serif', Georgia, serif;
+      font-size: 28px;
+      font-weight: 400;
+      color: var(--text-dark);
+    }
+
+    .tool-card-subtitle {
+      font-size: 14px;
+      color: var(--text-light);
+      margin-top: 4px;
+    }
+
+    .input-group {
+      margin-bottom: 16px;
+    }
+
+    .input-group label {
+      display: block;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-gray);
+      margin-bottom: 8px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    input, textarea {
+      width: 100%;
+      padding: 16px;
+      border: 2px solid #e2e8f0;
+      border-radius: var(--radius-md);
+      font-size: 16px;
+      font-family: 'DM Sans', sans-serif;
+      outline: none;
+      transition: all 0.2s;
+      background: var(--bg-light);
+    }
+
+    input:focus, textarea:focus {
+      border-color: var(--primary-blue);
+      background: var(--white);
+    }
+
+    textarea {
+      min-height: 120px;
+      resize: vertical;
+    }
+
+    .generate-btn {
+      width: 100%;
+      padding: 18px;
+      background: var(--gradient-hero);
+      color: var(--white);
+      border: none;
+      border-radius: var(--radius-md);
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+      margin-top: 8px;
+    }
+
+    .generate-btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+      transition: left 0.5s;
+    }
+
+    .generate-btn:hover::before {
+      left: 100%;
+    }
+
+    .generate-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(30, 58, 138, 0.3);
+    }
+
+    .generate-btn:active {
+      transform: translateY(0);
+    }
+
+    .result-box {
+      margin-top: 24px;
+      padding: 24px;
+      background: linear-gradient(135deg, #fefce8 0%, #fef9c3 100%);
+      border-radius: var(--radius-md);
+      border: 2px solid #fbbf24;
+      display: none;
+      animation: resultAppear 0.4s ease;
+    }
+
+    .result-box.visible {
+      display: block;
+    }
+
+    @keyframes resultAppear {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .result-label {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--accent-amber);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .result-label::before {
+      content: '✨';
+      font-size: 14px;
+    }
+
+    .result-content {
+      white-space: pre-line;
+      line-height: 1.8;
+      color: var(--text-dark);
+      font-size: 15px;
+    }
+
+    .result-actions {
+      display: flex;
+      gap: 12px;
+      margin-top: 16px;
+    }
+
+    .result-action-btn {
+      padding: 10px 20px;
+      background: transparent;
+      border: 2px solid var(--primary-blue);
+      color: var(--primary-blue);
+      border-radius: var(--radius-sm);
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      flex: 1;
+    }
+
+    .result-action-btn:hover {
+      background: var(--primary-blue);
+      color: var(--white);
+    }
+
+    .result-action-btn.primary {
+      background: var(--primary-blue);
+      color: var(--white);
+    }
+
+    .result-action-btn.primary:hover {
+      background: var(--primary-deep);
+    }
+
+    /* ===== FEATURES SECTION ===== */
+    .features-section {
+      padding: 100px 24px;
+      background: var(--white);
+    }
+
+    .features-container {
+      max-width: 1280px;
+      margin: 0 auto;
+    }
+
+    .features-header {
+      text-align: center;
+      margin-bottom: 80px;
+    }
+
+    .features-header h2 {
+      font-family: 'Instrument Serif', Georgia, serif;
+      font-size: clamp(36px, 4.5vw, 52px);
+      font-weight: 400;
+      color: var(--text-dark);
+      margin-bottom: 16px;
+    }
+
+    .features-header p {
+      font-size: 18px;
+      color: var(--text-gray);
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 32px;
+    }
+
+    .feature-card {
+      padding: 32px;
+      background: var(--bg-light);
+      border-radius: var(--radius-lg);
+      border: 1px solid rgba(0, 0, 0, 0.05);
+      transition: all 0.3s ease;
+    }
+
+    .feature-card:hover {
+      transform: translateY(-8px);
+      box-shadow: var(--shadow-lg);
+      background: var(--white);
+    }
+
+    .feature-icon {
+      width: 64px;
+      height: 64px;
+      background: var(--gradient-accent);
+      border-radius: var(--radius-md);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 32px;
+      margin-bottom: 20px;
+    }
+
+    .feature-card h3 {
+      font-size: 20px;
+      font-weight: 600;
+      color: var(--text-dark);
+      margin-bottom: 12px;
+    }
+
+    .feature-card p {
+      font-size: 15px;
+      color: var(--text-gray);
+      line-height: 1.7;
+    }
+
+    /* ===== CTA SECTION ===== */
+    .cta-section {
+      padding: 100px 24px;
+      background: var(--gradient-hero);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .cta-section::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: radial-gradient(circle at 50% 50%, rgba(245, 158, 11, 0.2) 0%, transparent 70%);
+    }
+
+    .cta-container {
+      max-width: 800px;
+      margin: 0 auto;
+      text-align: center;
+      position: relative;
+      z-index: 1;
+    }
+
+    .cta-container h2 {
+      font-family: 'Instrument Serif', Georgia, serif;
+      font-size: clamp(36px, 4.5vw, 52px);
+      font-weight: 400;
+      color: var(--white);
+      margin-bottom: 24px;
+    }
+
+    .cta-container p {
+      font-size: 18px;
+      color: rgba(255, 255, 255, 0.85);
+      margin-bottom: 40px;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .cta-buttons {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .cta-btn-primary {
+      padding: 18px 40px;
+      background: var(--gradient-accent);
+      color: var(--text-dark);
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 16px;
+      border-radius: var(--radius-md);
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 16px rgba(245, 158, 11, 0.4);
+    }
+
+    .cta-btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(245, 158, 11, 0.5);
+    }
+
+    .cta-btn-secondary {
+      padding: 18px 40px;
+      background: transparent;
+      color: var(--white);
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 16px;
+      border-radius: var(--radius-md);
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      transition: all 0.3s ease;
+    }
+
+    .cta-btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.1);
+      border-color: rgba(255, 255, 255, 0.5);
+    }
+
+    /* ===== FOOTER ===== */
+    .footer {
+      background: var(--primary-deep);
+      color: var(--white);
+      padding: 80px 24px 40px;
+    }
+
+    .footer-container {
+      max-width: 1280px;
+      margin: 0 auto;
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 48px;
+      margin-bottom: 60px;
+    }
+
+    .footer-section h4 {
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 20px;
+      color: var(--accent-amber-light);
+    }
+
+    .footer-section ul {
+      list-style: none;
+    }
+
+    .footer-section li {
+      margin-bottom: 12px;
+    }
+
+    .footer-section a {
+      color: rgba(255, 255, 255, 0.7);
+      text-decoration: none;
+      font-size: 15px;
+      transition: color 0.2s;
+    }
+
+    .footer-section a:hover {
+      color: var(--white);
+    }
+
+    .footer-bottom {
+      padding-top: 40px;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .footer-bottom p {
+      color: rgba(255, 255, 255, 0.5);
+      font-size: 14px;
+    }
+
+    .footer-social {
+      display: flex;
+      gap: 16px;
+    }
+
+    .footer-social a {
+      width: 40px;
+      height: 40px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--white);
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+
+    .footer-social a:hover {
+      background: var(--accent-amber);
+      color: var(--text-dark);
+    }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 768px) {
+      .nav-links {
+        display: none;
+      }
+
+      .hero-stats {
+        flex-direction: column;
+        gap: 24px;
+      }
+
+      .tools-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .cta-buttons {
+        flex-direction: column;
+      }
+
+      .footer-bottom {
+        flex-direction: column;
+        text-align: center;
+      }
+    }
+
+    /* ===== LOADING STATE ===== */
+    .loading {
+      position: relative;
+      color: transparent !important;
+      pointer-events: none;
+    }
+
+    .loading::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 20px;
+      height: 20px;
+      margin: -10px 0 0 -10px;
+      border: 3px solid rgba(255, 255, 255, 0.3);
+      border-top-color: #fff;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+  </style>
+</head>
+<body>
+  <!-- NAVIGATION -->
+  <nav class="navbar" id="navbar">
+    <div class="nav-container">
+      <a href="index.html" class="nav-logo">
+        <div class="nav-logo-icon">⚡</div>
+        ResumeAIPro
+      </a>
+      <div class="nav-links">
+        <a href="index.html#tools" class="nav-link">Tools</a>
+        <a href="features.html" class="nav-link">Features</a>
+        <a href="pricing.html" class="nav-link">Pricing</a>
+        <a href="blog.html" class="nav-link">Blog</a>
+        <a href="pricing.html" class="nav-cta">Get Pro →</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- HERO SECTION -->
+  <section class="hero">
+    <div class="hero-container">
+      <div class="hero-badge">No Sign-up Required • 100% Free</div>
+      <h1>
+        Land Your Dream Job with<br>
+        <span class="highlight">AI-Powered</span> Documents
+      </h1>
+      <p class="hero-subtitle">
+        Generate professional cover letters and recruiter-approved resume bullets in seconds. 
+        No templates, no hassle—just instant results tailored to your experience.
+      </p>
+      
+      <div class="hero-stats">
+        <div class="hero-stat">
+          <div class="hero-stat-number">50K+</div>
+          <div class="hero-stat-label">Job seekers helped</div>
+        </div>
+        <div class="hero-stat">
+          <div class="hero-stat-number">4.9/5</div>
+          <div class="hero-stat-label">User satisfaction</div>
+        </div>
+        <div class="hero-stat">
+          <div class="hero-stat-number">&lt;10s</div>
+          <div class="hero-stat-label">Average generation time</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TOOLS SECTION -->
+  <section class="tools-section" id="tools">
+    <div class="tools-container">
+      <div class="tools-header">
+        <h2>Start Creating in Seconds</h2>
+        <p>Two powerful tools, zero learning curve. Just paste your details and let AI do the heavy lifting.</p>
+      </div>
+
+      <div class="tools-grid">
+        <!-- Resume Bullets Tool -->
+        <div class="tool-card">
+          <div class="tool-card-header">
+            <div class="tool-icon">📝</div>
+            <div>
+              <h3>Resume Bullet Points</h3>
+              <div class="tool-card-subtitle">Transform experience into impact</div>
+            </div>
+          </div>
+
+          <div class="input-group">
+            <label>Target Job Title</label>
+            <input type="text" id="jobTitle" placeholder="e.g. Software Engineer, Sales Manager">
+          </div>
+
+          <div class="input-group">
+            <label>Your Work Experience</label>
+            <textarea id="workExp" placeholder="Paste your job responsibilities, achievements, or rough notes here..."></textarea>
+          </div>
+
+          <button class="generate-btn" onclick="generateBullets()">
+            Generate Professional Bullets ✨
+          </button>
+
+          <div id="bulletResult" class="result-box">
+            <div class="result-label">AI-Generated Bullet Points</div>
+            <div class="result-content" id="bulletContent"></div>
+            <div class="result-actions">
+              <button class="result-action-btn primary" onclick="copyToClipboard('bulletContent')">
+                📋 Copy All
+              </button>
+              <button type="button" class="result-action-btn" onclick="generateBullets(this)">
+                🔄 Regenerate
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Cover Letter Tool -->
+        <div class="tool-card">
+          <div class="tool-card-header">
+            <div class="tool-icon">✉️</div>
+            <div>
+              <h3>Cover Letter</h3>
+              <div class="tool-card-subtitle">Stand out from the stack</div>
+            </div>
+          </div>
+
+          <div class="input-group">
+            <label>Company Name</label>
+            <input type="text" id="companyName" placeholder="e.g. Google, Amazon">
+          </div>
+
+          <div class="input-group">
+            <label>Position</label>
+            <input type="text" id="targetPosition" placeholder="e.g. Product Manager">
+          </div>
+
+          <div class="input-group">
+            <label>Your Skills & Experience</label>
+            <textarea id="userSkills" placeholder="Describe your relevant experience, key achievements, and why you're a great fit..."></textarea>
+          </div>
+
+          <button class="generate-btn" onclick="generateCoverLetter()">
+            Generate Cover Letter ✨
+          </button>
+
+          <div id="coverResult" class="result-box">
+            <div class="result-label">AI-Generated Cover Letter</div>
+            <div class="result-content" id="coverContent"></div>
+            <div class="result-actions">
+              <button class="result-action-btn primary" onclick="copyToClipboard('coverContent')">
+                📋 Copy All
+              </button>
+              <button class="result-action-btn" onclick="generateCoverLetter()">
+                🔄 Regenerate
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FEATURES SECTION -->
+  <section class="features-section">
+    <div class="features-container">
+      <div class="features-header">
+        <h2>Why Job Seekers Love Us</h2>
+        <p>Built by hiring experts, powered by advanced AI. Here's what makes us different.</p>
+      </div>
+
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon">⚡</div>
+          <h3>Instant Results</h3>
+          <p>No waiting, no templates to fill. Just paste your details and get professional content in under 10 seconds.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">🎯</div>
+          <h3>ATS-Optimized</h3>
+          <p>Our bullets are crafted to pass Applicant Tracking Systems and catch recruiters' attention in seconds.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">🔒</div>
+          <h3>No Sign-Up Required</h3>
+          <p>Start using immediately. No email, no password, no credit card. Just pure value, zero friction.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">💎</div>
+          <h3>Recruiter-Approved</h3>
+          <p>Our prompts are designed by hiring managers who've reviewed 10,000+ resumes. We know what works.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">🌍</div>
+          <h3>Global Reach</h3>
+          <p>Optimized for US, UK, EU, and international job markets. Tailored for different industries and experience levels.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">✨</div>
+          <h3>Always Improving</h3>
+          <p>Our AI models are continuously updated based on the latest hiring trends and recruiter feedback.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA SECTION -->
+  <section class="cta-section">
+    <div class="cta-container">
+      <h2>Ready to Land More Interviews?</h2>
+      <p>Join 50,000+ job seekers who've transformed their applications with AI-powered documents.</p>
+      <div class="cta-buttons">
+        <a href="#tools" class="cta-btn-primary">Start Free →</a>
+        <a href="pricing.html" class="cta-btn-secondary">View Pro Plans</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="footer-container">
+      <div class="footer-grid">
+        <div class="footer-section">
+          <h4>Product</h4>
+          <ul>
+            <li><a href="index.html">Resume Bullets</a></li>
+            <li><a href="index.html">Cover Letter</a></li>
+            <li><a href="features.html">Pro Features</a></li>
+            <li><a href="pricing.html">Pricing</a></li>
+          </ul>
+        </div>
+        <div class="footer-section">
+          <h4>Resources</h4>
+          <ul>
+            <li><a href="blog.html">Blog</a></li>
+            <li><a href="blog.html">Career Tips</a></li>
+            <li><a href="blog.html">Resume Guide</a></li>
+            <li><a href="blog.html">Interview Prep</a></li>
+          </ul>
+        </div>
+        <div class="footer-section">
+          <h4>Company</h4>
+          <ul>
+            <li><a href="privacy.html">Privacy Policy</a></li>
+            <li><a href="terms.html">Terms of Service</a></li>
+            <li><a href="disclaimer.html">Disclaimer</a></li>
+            <li><a href="mailto:hello@resumeaipro.pro">Contact</a></li>
+          </ul>
+        </div>
+        <div class="footer-section">
+          <h4>Connect</h4>
+          <ul>
+            <li><a href="#">Twitter</a></li>
+            <li><a href="#">LinkedIn</a></li>
+            <li><a href="#">Reddit</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>© 2026 ResumeAIPro. All rights reserved.</p>
+        <div class="footer-social">
+          <a href="#" title="Twitter">𝕏</a>
+          <a href="#" title="LinkedIn">in</a>
+          <a href="#" title="Reddit">⟪</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Navbar scroll effect
+    window.addEventListener('scroll', () => {
+      const navbar = document.getElementById('navbar');
+      if (window.scrollY > 50) {
+        navbar.classList.add('scrolled');
+      } else {
+        navbar.classList.remove('scrolled');
+      }
+    });
+
+    // Smooth scroll for anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      });
+    });
+
+    // Generate Resume Bullets
+    async function generateBullets() {
+      const jobTitle = document.getElementById("jobTitle").value.trim();
+      const workExp = document.getElementById("workExp").value.trim();
+      
+      if (!jobTitle || !workExp) {
+        alert("Please fill in job title and your work experience");
+        return;
+      }
+
+      const resultBox = document.getElementById("bulletResult");
+      const resultContent = document.getElementById("bulletContent");
+      const btn = event.target;
+      
+      btn.classList.add('loading');
+      btn.disabled = true;
+      resultBox.classList.add('visible');
+      resultContent.innerText = "Generating optimized bullets...";
+
+      try {
+        const response = await fetch('/api/generate', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            task: 'bullets',
+            jobTitle,
+            experience: workExp
+          })
+        });
+        let data;
+        try {
+          data = await response.json();
+        } catch {
+          resultContent.innerText =
+            'API调用失败：服务器返回异常（HTTP ' + response.status + '）。请查看终端日志或稍后重试。';
+          return;
+        }
+        if (!response.ok) {
+          resultContent.innerText = data.error || 'API调用失败，请稍后重试。';
+        } else {
+          resultContent.innerText = data.result || '';
+        }
+      } catch (err) {
+        console.error(err);
+        resultContent.innerText =
+          'Network error. Run the local server (e.g. node server.js) and open http://localhost:3000';
+      } finally {
+        btn.classList.remove('loading');
+        btn.disabled = false;
+      }
+    }
+
+    // Generate Cover Letter
+    async function generateCoverLetter() {
+      const company = document.getElementById("companyName").value.trim();
+      const position = document.getElementById("targetPosition").value.trim();
+      const skills = document.getElementById("userSkills").value.trim();
+
+      if (!company || !position || !skills) {
+        alert("Please fill in all required fields");
+        return;
+      }
+
+      const resultBox = document.getElementById("coverResult");
+      const resultContent = document.getElementById("coverContent");
+      const btn = event.target;
+
+      btn.classList.add('loading');
+      btn.disabled = true;
+      resultBox.classList.add('visible');
+      resultContent.innerText = "Generating your cover letter...";
+
+      try {
+        const response = await fetch('/api/generate', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            task: 'coverLetter',
+            company,
+            position,
+            skills
+          })
+        });
+        let data;
+        try {
+          data = await response.json();
+        } catch {
+          resultContent.innerText =
+            'API调用失败：服务器返回异常（HTTP ' + response.status + '）。请查看终端日志或稍后重试。';
+          return;
+        }
+        if (!response.ok) {
+          resultContent.innerText = data.error || 'API调用失败，请稍后重试。';
+        } else {
+          resultContent.innerText = data.result || '';
+        }
+      } catch (err) {
+        console.error(err);
+        resultContent.innerText =
+          'Network error. If you opened this page as a file, run the local server (e.g. node server.js) and open http://localhost:3000';
+      } finally {
+        btn.classList.remove('loading');
+        btn.disabled = false;
+      }
+    }
+
+    // Copy to Clipboard
+    function copyToClipboard(elementId) {
+      const text = document.getElementById(elementId).innerText;
+      navigator.clipboard.writeText(text).then(() => {
+        const btn = event.target;
+        const originalText = btn.innerText;
+        btn.innerText = '✓ Copied!';
+        setTimeout(() => {
+          btn.innerText = originalText;
+        }, 2000);
+      });
+    }
+  </script>
+</body>
+</html>

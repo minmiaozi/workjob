@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI简历优化助手</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: Arial, sans-serif;
+    }
+    body {
+      max-width: 800px;
+      margin: 40px auto;
+      padding: 20px;
+      background: #f5f7fa;
+    }
+    .container {
+      background: white;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    h1 {
+      text-align: center;
+      margin-bottom: 24px;
+      color: #333;
+    }
+    .form-item {
+      margin-bottom: 18px;
+    }
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: bold;
+      color: #555;
+    }
+    input, textarea {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      font-size: 16px;
+    }
+    button {
+      width: 100%;
+      padding: 14px;
+      background: #4096ff;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-size: 16px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+    button:hover {
+      background: #2578e0;
+    }
+    .result {
+      margin-top: 24px;
+      padding: 18px;
+      background: #f0f7ff;
+      border-radius: 8px;
+      white-space: pre-wrap;
+      line-height: 1.6;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>AI 简历优化助手</h1>
+    
+    <div class="form-item">
+      <label>求职岗位</label>
+      <input type="text" id="jobTitle" placeholder="例如：产品经理、前端工程师、运营">
+    </div>
+
+    <div class="form-item">
+      <label>你的工作经历</label>
+      <textarea id="content" rows="6" placeholder="请输入你的工作内容、项目经验、职责"></textarea>
+    </div>
+
+    <button onclick="generate()">一键优化简历</button>
+
+    <div id="result" class="result" style="display:none;"></div>
+  </div>
+
+  <script>
+    async function generate() {
+      const job = document.getElementById('jobTitle').value;
+      const content = document.getElementById('content').value;
+      const resultBox = document.getElementById('result');
+
+      if (!job || !content) {
+        alert('请填写完整信息');
+        return;
+      }
+
+      resultBox.style.display = 'block';
+      resultBox.innerText = 'AI 正在生成中...';
+
+      try {
+        const res = await fetch('/api/generate', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            messages: [
+              { role: 'system', content: '你是专业的简历优化师，把用户的经历改成专业、简洁、适合投递的简历要点。' },
+              { role: 'user', content: `求职岗位：${job}，经历：${content}` }
+            ]
+          })
+        });
+
+        const data = await res.json();
+        if (data.error) throw new Error(data.error);
+
+        resultBox.innerText = data.choices[0].message.content;
+      } catch (err) {
+        resultBox.innerText = '错误：' + err.message;
+      }
+    }
+  </script>
+</body>
+</html>
